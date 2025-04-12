@@ -1,0 +1,26 @@
+[
+  {
+    "city": "Rome",
+    "name": "Colosseum",
+    "type": "historical",
+    "cost": 20
+  },
+  {
+    "city": "Rome",
+    "name": "Vatican Museums",
+    "type": "cultural",
+    "cost": 25
+  },
+  {
+    "city": "Rome",
+    "name": "Trevi Fountain",
+    "type": "landmark",
+    "cost": 0
+  },
+  {
+    "city": "Rome",
+    "name": "Roman Forum",
+    "type": "historical",
+    "cost": 15
+  }
+] 

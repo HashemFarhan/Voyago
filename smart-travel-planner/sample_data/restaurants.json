@@ -1,0 +1,26 @@
+[
+  {
+    "city": "Rome",
+    "name": "Trattoria Romana",
+    "cost_estimate": 25,
+    "type": "Italian"
+  },
+  {
+    "city": "Rome",
+    "name": "Ristorante La Pergola",
+    "cost_estimate": 150,
+    "type": "Fine Dining"
+  },
+  {
+    "city": "Rome",
+    "name": "Pizzeria da Michele",
+    "cost_estimate": 15,
+    "type": "Pizza"
+  },
+  {
+    "city": "Rome",
+    "name": "Gelateria del Centro",
+    "cost_estimate": 5,
+    "type": "Dessert"
+  }
+]

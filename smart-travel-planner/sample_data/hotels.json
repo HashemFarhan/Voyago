@@ -1,0 +1,20 @@
+[
+  {
+    "city": "Rome",
+    "name": "Hotel Roma Bliss",
+    "price_per_night": 90,
+    "rating": 4.5
+  },
+  {
+    "city": "Rome",
+    "name": "Grand Hotel Rome",
+    "price_per_night": 150,
+    "rating": 4.8
+  },
+  {
+    "city": "Rome",
+    "name": "Budget Inn Rome",
+    "price_per_night": 60,
+    "rating": 3.5
+  }
+] 
