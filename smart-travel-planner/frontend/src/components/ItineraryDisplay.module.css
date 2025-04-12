@@ -142,7 +142,7 @@
 .dayCard {
   background-color: #ffffff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 0;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid #e9ecef;
@@ -157,8 +157,11 @@
 .dayHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 16px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
 }
 
 .dayHeader h3 {
@@ -187,10 +190,12 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
+  padding: 0 16px;
 }
 
 .dayCard.expanded .dayContent {
-  max-height: 500px;
+  max-height: 2000px;
+  padding: 16px;
 }
 
 .activities {
@@ -209,29 +214,115 @@
   margin: 0;
 }
 
-.activityItem {
+.activityList {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: transform 0.2s ease;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.activityItem {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  margin-bottom: 16px;
 }
 
 .activityItem:hover {
   transform: translateX(4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.activityIcon {
+  font-size: 24px;
+  width: 32px;
+  text-align: center;
 }
 
 .activityName {
+  font-weight: 600;
   color: #2c3e50;
-  font-weight: 500;
+  flex-grow: 1;
+}
+
+.activityTime {
+  color: #6c757d;
+  font-size: 14px;
+  background-color: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.activityDescription {
+  color: #495057;
+  font-size: 14px;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.activityFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e9ecef;
+}
+
+.activityType {
+  color: #6c757d;
+  font-size: 14px;
+  text-transform: capitalize;
+  background-color: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .activityCost {
   color: #28a745;
   font-weight: 600;
+}
+
+.dayTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dayTheme {
+  color: #007bff;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #e7f1ff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  align-self: flex-start;
+}
+
+.activityDetails {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.activityDuration {
+  color: #6c757d;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* Scrollbar styling */

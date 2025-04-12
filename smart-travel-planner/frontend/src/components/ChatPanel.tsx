@@ -11,10 +11,14 @@ interface Activity {
   name: string;
   type: string;
   cost: number;
+  time: string;
+  description: string;
+  duration: string;
 }
 
 interface DayPlan {
   day: number;
+  theme: string;
   activities: Activity[];
   hotel: string;
   cost_estimate: number;

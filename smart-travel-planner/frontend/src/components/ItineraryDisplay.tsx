@@ -5,10 +5,14 @@ interface Activity {
   name: string;
   type: string;
   cost: number;
+  time: string;
+  description: string;
+  duration: string;
 }
 
 interface DayPlan {
   day: number;
+  theme: string;
   activities: Activity[];
   hotel: string;
   cost_estimate: number;
@@ -55,6 +59,40 @@ const ItineraryDisplay: React.FC<ItineraryDisplayProps> = ({ itinerary }) => {
     setExpandedDay(expandedDay === day ? null : day);
   };
 
+  const getActivityIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'historical':
+        return '🏛️';
+      case 'cultural':
+        return '🎭';
+      case 'dining':
+        return '🍽️';
+      case 'landmark':
+        return '🗼';
+      case 'museum':
+        return '🖼️';
+      case 'park':
+        return '🌳';
+      case 'shopping':
+        return '🛍️';
+      default:
+        return '📍';
+    }
+  };
+
+  const getTimeIcon = (time: string) => {
+    switch (time.toLowerCase()) {
+      case 'morning':
+        return '🌅';
+      case 'afternoon':
+        return '☀️';
+      case 'evening':
+        return '🌙';
+      default:
+        return '⏰';
+    }
+  };
+
   return (
     <div className={styles.itineraryDisplay}>
       <div className={styles.itineraryHeader}>
@@ -99,7 +137,10 @@ const ItineraryDisplay: React.FC<ItineraryDisplayProps> = ({ itinerary }) => {
             onClick={() => toggleDay(dayPlan.day)}
           >
             <div className={styles.dayHeader}>
-              <h3>Day {dayPlan.day}</h3>
+              <div className={styles.dayTitle}>
+                <h3>Day {dayPlan.day}</h3>
+                <span className={styles.dayTheme}>🎯 {dayPlan.theme}</span>
+              </div>
               <div className={styles.daySummary}>
                 <span className={styles.hotelName}>🏨 {dayPlan.hotel}</span>
                 <span className={styles.costEstimate}>💵 ${dayPlan.cost_estimate}</span>
@@ -108,15 +149,30 @@ const ItineraryDisplay: React.FC<ItineraryDisplayProps> = ({ itinerary }) => {
             
             <div className={styles.dayContent}>
               <div className={styles.activities}>
-                <h4>🎯 Activities</h4>
-                <ul>
+                <h4>📅 Daily Activities</h4>
+                <div className={styles.activityList}>
                   {dayPlan.activities.map((activity, index) => (
-                    <li key={index} className={styles.activityItem}>
-                      <span className={styles.activityName}>{activity.name}</span>
-                      <span className={styles.activityCost}>${activity.cost}</span>
-                    </li>
+                    <div key={index} className={styles.activityItem}>
+                      <div className={styles.activityHeader}>
+                        <span className={styles.activityIcon}>
+                          {getActivityIcon(activity.type)}
+                        </span>
+                        <span className={styles.activityName}>{activity.name}</span>
+                        <span className={styles.activityTime}>
+                          {getTimeIcon(activity.time)} {activity.time}
+                        </span>
+                      </div>
+                      <p className={styles.activityDescription}>{activity.description}</p>
+                      <div className={styles.activityFooter}>
+                        <div className={styles.activityDetails}>
+                          <span className={styles.activityType}>{activity.type}</span>
+                          <span className={styles.activityDuration}>⏱️ {activity.duration}</span>
+                        </div>
+                        <span className={styles.activityCost}>${activity.cost}</span>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>
