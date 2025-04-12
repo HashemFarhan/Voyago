@@ -57,11 +57,14 @@ class TripDetails(BaseModel):
             "type": "Italian"
         }]
     )
-
+    trip_duration: int = Field(
+        description="The number of days for the trip",
+        example=5
+    )
     budget: int = Field(
         description="The total budget of the trip in USD",
         example=1000
-        )
+    )
 
 client = instructor.from_groq(Groq(api_key=api_key), mode=instructor.Mode.JSON)
 
@@ -102,13 +105,12 @@ def extract_trip_details(message: str) -> Dict[str, Any]:
         Extract the following information from this travel request: {message}
         Return ONLY a JSON object with these fields:
         - destination (string)
-        - duration (integer, number of days)
+        - trip_duration (integer, number of days)
         - budget (integer, total budget in USD)
         - preferences (array of strings, any specific preferences mentioned)
         """
         
         response = client.chat.completions.create(
-            # model="llama-3.3-70b-versatile",
             model="deepseek-r1-distill-llama-70b",
             response_model=TripDetails,
             messages=[{"role": "user", "content": prompt}],
@@ -116,9 +118,6 @@ def extract_trip_details(message: str) -> Dict[str, Any]:
         )
         
         try:
-            print('RESPONSE2', response)
-            print()
-            print(response.flights)
             return response
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse GPT response as JSON: {str(e)}")
@@ -140,7 +139,7 @@ def generate_itinerary(message: str) -> Dict[str, Any]:
         prompt = f"""
         Create a detailed travel itinerary based on these requirements:
         Destination: {trip_details.flights[0]['destination']}
-    Duration: {trip_details.flights[0]['length']} days
+        Trip Duration: {trip_details.trip_duration} days
         Budget: ${trip_details.budget}
 
         If you cannot find data for a certain field, generate random data that meets the requirements. and add it to the sample data. 
@@ -164,7 +163,6 @@ def generate_itinerary(message: str) -> Dict[str, Any]:
         """
         
         response = client.chat.completions.create(
-            # model="llama-3.3-70b-versatile",
             model="deepseek-r1-distill-llama-70b",
             response_model=TripDetails,
             messages=[{"role": "user", "content": prompt}],
@@ -174,7 +172,7 @@ def generate_itinerary(message: str) -> Dict[str, Any]:
         # Convert response to proper format
         itinerary = {
             "destination": response.flights[0]['destination'],
-            "duration": response.flights[0]['length'],
+            "duration": response.trip_duration,
             "budget": response.budget,
             "flights": response.flights,
             "hotels": response.hotels,
@@ -182,22 +180,26 @@ def generate_itinerary(message: str) -> Dict[str, Any]:
                 {
                     "day": i + 1,
                     "activities": [
-                        f"Visit {attraction['name']}" for attraction in response.attractions
+                        {
+                            "name": attraction['name'],
+                            "type": attraction['type'],
+                            "cost": attraction['cost']
+                        } for attraction in response.attractions
                     ],
                     "hotel": response.hotels[0]['name'],
                     "cost_estimate": sum(att['cost'] for att in response.attractions) + response.hotels[0]['price_per_night']
                 }
-                for i in range(int(response.flights[0]['length']))
+                for i in range(response.trip_duration)
             ]
         }
         
+        print('ITINERARY', itinerary)
         return itinerary
     except Exception as e:
         logger.error(f"Error in generate_itinerary: {str(e)}")
-        raise
+        raise ValueError(f"Failed to generate itinerary: {str(e)}")
 
 ## NEXT: MAKE SURE RESPONSE IS CONSISTENT / INTEGRARE WITH UI
 
 
-print("NKJNKJNK")
-print(generate_itinerary("I want to go to France for the duration of 5 days with a budget of $1000"))
+# print(generate_itinerary("I want to go to France for the duration of 5 days with a budget of $1000"))

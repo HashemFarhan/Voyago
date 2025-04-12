@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ItineraryDisplay.module.css';
 
 interface Activity {
@@ -38,55 +38,86 @@ interface ItineraryDisplayProps {
 }
 
 const ItineraryDisplay: React.FC<ItineraryDisplayProps> = ({ itinerary }) => {
+  const [expandedDay, setExpandedDay] = useState<number | null>(null);
+
   if (!itinerary) {
     return (
       <div className={`${styles.itineraryDisplay} ${styles.empty}`}>
-        <p>Your travel itinerary will appear here</p>
+        <div className={styles.emptyContent}>
+          <h2>✨ Your Travel Itinerary</h2>
+          <p>Start planning your trip by entering your travel request in the chat!</p>
+        </div>
       </div>
     );
   }
 
+  const toggleDay = (day: number) => {
+    setExpandedDay(expandedDay === day ? null : day);
+  };
+
   return (
     <div className={styles.itineraryDisplay}>
       <div className={styles.itineraryHeader}>
-        <h2>{itinerary.destination} Itinerary</h2>
+        <h2>✨ {itinerary.destination} Itinerary ✨</h2>
         <div className={styles.tripSummary}>
-          <p>Duration: {itinerary.duration} days</p>
-          <p>Budget: ${itinerary.budget}</p>
+          <div className={styles.summaryCard}>
+            <span className={styles.summaryLabel}>Duration</span>
+            <span className={styles.summaryValue}>{itinerary.duration} days</span>
+          </div>
+          <div className={styles.summaryCard}>
+            <span className={styles.summaryLabel}>Budget</span>
+            <span className={styles.summaryValue}>${itinerary.budget}</span>
+          </div>
         </div>
       </div>
 
       <div className={styles.flightsSection}>
-        <h3>Flights</h3>
+        <h3>✈️ Flights</h3>
         {itinerary.flights.map((flight, index) => (
           <div key={index} className={styles.flightCard}>
-            <p>{flight.airline}</p>
-            <p>{flight.origin} → {flight.destination}</p>
-            <p>Price: ${flight.price}</p>
-            <p>Duration: {flight.duration}</p>
+            <div className={styles.flightHeader}>
+              <span className={styles.airline}>{flight.airline}</span>
+              <span className={styles.price}>${flight.price}</span>
+            </div>
+            <div className={styles.flightRoute}>
+              <span className={styles.origin}>{flight.origin}</span>
+              <span className={styles.arrow}>→</span>
+              <span className={styles.destination}>{flight.destination}</span>
+            </div>
+            <div className={styles.flightDuration}>
+              <span>⏱️ {flight.duration}</span>
+            </div>
           </div>
         ))}
       </div>
 
       <div className={styles.dailyPlans}>
         {itinerary.daily_plan.map((dayPlan) => (
-          <div key={dayPlan.day} className={styles.dayCard}>
-            <h3>Day {dayPlan.day}</h3>
-            <div className={styles.hotelInfo}>
-              <h4>Hotel: {dayPlan.hotel}</h4>
+          <div 
+            key={dayPlan.day} 
+            className={`${styles.dayCard} ${expandedDay === dayPlan.day ? styles.expanded : ''}`}
+            onClick={() => toggleDay(dayPlan.day)}
+          >
+            <div className={styles.dayHeader}>
+              <h3>Day {dayPlan.day}</h3>
+              <div className={styles.daySummary}>
+                <span className={styles.hotelName}>🏨 {dayPlan.hotel}</span>
+                <span className={styles.costEstimate}>💵 ${dayPlan.cost_estimate}</span>
+              </div>
             </div>
-            <div className={styles.activities}>
-              <h4>Activities:</h4>
-              <ul>
-                {dayPlan.activities.map((activity, index) => (
-                  <li key={index}>
-                    {activity.name} (${activity.cost})
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.daySummary}>
-              <p>Estimated Cost: ${dayPlan.cost_estimate}</p>
+            
+            <div className={styles.dayContent}>
+              <div className={styles.activities}>
+                <h4>🎯 Activities</h4>
+                <ul>
+                  {dayPlan.activities.map((activity, index) => (
+                    <li key={index} className={styles.activityItem}>
+                      <span className={styles.activityName}>{activity.name}</span>
+                      <span className={styles.activityCost}>${activity.cost}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         ))}
