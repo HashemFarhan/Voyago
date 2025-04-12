@@ -45,7 +45,8 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>Smart Travel Planner</h1>
+        <h1>Voyago</h1>
+        <p className="subtitle">Your AI Travel Companion</p>
       </header>
       <main>
         <div className="chat-section">
